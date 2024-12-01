@@ -8,7 +8,7 @@ int compare_ints(const void *a, const void *b) {
 }
 
 int main() {
-  char *input = read_file_content("src/solutions/day1/input");
+  char *input = read_file_content("inputs/day1/input");
   if (input == NULL) {
     return 1;
   }
@@ -32,7 +32,6 @@ int main() {
       }
       free(*(lines + i));
     }
-    printf("\n");
     free(lines);
   }
 
@@ -45,7 +44,7 @@ int main() {
 
   char buf[100];
   sprintf(buf, "%d", sum);
-  write_to_file("src/solutions/day1/output-part1", buf);
+  write_to_file("outputs/day1/output-part1", buf);
 
   free(input);
   return 0;
