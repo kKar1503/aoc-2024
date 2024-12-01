@@ -4,6 +4,7 @@
 #include <string.h>
 
 char **str_split(char *a_str, const char a_delim, size_t *count) {
+  a_str = strdup(a_str);
   char **result = 0;
   *count = 0;
   char *tmp = a_str;
