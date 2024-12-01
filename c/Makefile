@@ -4,10 +4,11 @@ LDFLAGS =
 
 # Default target
 all:
-	@echo "Usage: make dayX/partY (e.g., make day1/part1 or make day10/part2)"
+	@echo "Usage: make run/dayX/partY (e.g., make run/day1/part1 or make run/day10/part2)"
+	@echo "       make read/dayX/partY (e.g., make read/day1/part1 or make read/day10/part2)"
 
 # Dynamic rule for any day/part
-build/%:
+run/%:
 	@day=$(shell dirname $*); \
 	part=$(shell basename $*); \
 	solution_dir=src/solutions/$$day; \
