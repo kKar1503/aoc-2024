@@ -1,6 +1,8 @@
 CC = clang
 CFLAGS = -I../../include/runner
 LDFLAGS =
+BIN_DIR = bin
+OUTPUT_DIR = outputs
 
 # Default target
 all:
@@ -8,19 +10,31 @@ all:
 	@echo "       make read/dayX/partY (e.g., make read/day1/part1 or make read/day10/part2)"
 
 # Dynamic rule for any day/part
-run/%:
+build/%:
 	@day=$(shell dirname $*); \
 	part=$(shell basename $*); \
 	solution_dir=src/solutions/$$day; \
-	input_file=$$solution_dir/input.txt; \
-	$(CC) $(CFLAGS) $$solution_dir/$$part.c src/runner/helper_utils.c src/runner/file_utils.c -o $$solution_dir/$$part.out; \
-	echo "Running $$part.out..."; \
-	$$solution_dir/$$part.out
+	if [ ! -f inputs/$$day ]; then \
+		echo "Error: inputs/$$day not found"; \
+		exit 1; \
+	fi; \
+	mkdir -p $(BIN_DIR); \
+	mkdir -p $(BIN_DIR)/$$day; \
+	echo "Building $(BIN_DIR)/$$day/$$part.out..."; \
+	$(CC) $(CFLAGS) $$solution_dir/$$part.c src/runner/helper_utils.c src/runner/file_utils.c -o $(BIN_DIR)/$$day/$$part.out
 
-read/%:
+run/%: build/%
 	@day=$(shell dirname $*); \
 	part=$(shell basename $*); \
-	solution_dir=src/solutions/$$day; \
-	output_file=$$solution_dir/output-$$part; \
+	mkdir -p $(OUTPUT_DIR); \
+	mkdir -p $(OUTPUT_DIR)/$$day; \
+	bin_file=$(BIN_DIR)/$$day/$$part.out; \
+	echo "Running $$bin_file..."; \
+	$$bin_file
+
+read/%: run/%
+	@day=$(shell dirname $*); \
+	part=$(shell basename $*); \
+	output_file=$(OUTPUT_DIR)/$$day/output-$$part; \
 	echo "Reading $$output_file..."; \
 	cat $$output_file
