@@ -8,7 +8,7 @@ int compare_ints(const void *a, const void *b) {
 }
 
 int main() {
-  char *input = read_file_content("inputs/day1/input");
+  char *input = read_file_content("inputs/day1");
   if (input == NULL) {
     return 1;
   }

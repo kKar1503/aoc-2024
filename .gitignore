@@ -1,5 +1,6 @@
 # Input and output files
 */**/input
+c/inputs/*
 */**/output-part*
 
 # C output files
