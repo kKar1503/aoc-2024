@@ -1,0 +1,6 @@
+# Input and output files
+*/**/input
+*/**/output-part*
+
+# C output files
+*.out
