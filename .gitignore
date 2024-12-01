@@ -1,7 +1,11 @@
 # Input and output files
 */**/input
-c/inputs/*
 */**/output-part*
+*/**/inputs/*
+*/**/outputs/*
 
 # C output files
 *.out
+
+# Python
+*/**/__pycache__
