@@ -38,3 +38,7 @@ read/%: run/%
 	output_file=$(OUTPUT_DIR)/$$day/output-$$part; \
 	echo "Reading $$output_file..."; \
 	cat $$output_file
+
+# Clean up
+clean:
+	rm -rf $(BIN_DIR) $(OUTPUT_DIR)
