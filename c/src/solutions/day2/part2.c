@@ -29,6 +29,9 @@ bool is_safe_skip(char **levels, size_t level_count, size_t i) {
   }
   prev = first;
   for (int j = i == 0 || i == 1 ? 3 : 2; j < level_count; j++) {
+    if (j == i) {
+      continue;
+    }
     int current = atoi(levels[j]);
     int delta = current - prev;
     if (delta == 0 || abs(delta) > 3) {
