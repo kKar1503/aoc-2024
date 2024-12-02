@@ -25,10 +25,6 @@ char **str_split(char *a_str, const char a_delim, size_t *count) {
   /* Add space for trailing token. */
   *count += last_comma < (a_str + strlen(a_str) - 1);
 
-  /* Add space for terminating null string so caller
-     knows where the list of returned strings ends. */
-  (*count)++;
-
   result = malloc(sizeof(char *) * *count);
 
   if (result) {
@@ -40,9 +36,22 @@ char **str_split(char *a_str, const char a_delim, size_t *count) {
       *(result + idx++) = strdup(token);
       token = strtok(0, delim);
     }
-    assert(idx == *count - 1);
-    *(result + idx) = 0;
+    assert(idx == *count);
   }
 
   return result;
+}
+
+char **remove_element_str(char **array, size_t size, size_t i) {
+  char **new_array = malloc((size - 1) * sizeof(char *));
+  char **p = array;
+  char **p_new = new_array;
+  for (size_t j = 0; j < size; j++) {
+    if (j != i) {
+      *p_new = strdup(*p);
+      p_new++;
+    }
+    p++;
+  }
+  return new_array;
 }
