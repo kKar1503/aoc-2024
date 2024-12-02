@@ -20,6 +20,28 @@ void print_address(char **levels, size_t level_count) {
   }
 }
 
+bool is_safe_skip(char **levels, size_t level_count, size_t i) {
+  int prev = i == 0 ? atoi(levels[1]) : atoi(levels[0]);
+  int first = i == 0 || i == 1 ? atoi(levels[2]) : atoi(levels[1]);
+  int direction = first - prev;
+  if (direction == 0 || abs(direction) > 3) {
+    return false;
+  }
+  prev = first;
+  for (int j = i == 0 || i == 1 ? 3 : 2; j < level_count; j++) {
+    int current = atoi(levels[j]);
+    int delta = current - prev;
+    if (delta == 0 || abs(delta) > 3) {
+      return false;
+    }
+    if (sign(delta) != sign(direction)) {
+      return false;
+    }
+    prev = current;
+  }
+  return true;
+}
+
 bool is_safe(char **levels, size_t level_count) {
   int prev = atoi(levels[0]);
   int first = atoi(levels[1]);
@@ -67,19 +89,10 @@ int main() {
         }
 
         for (int j = 0; j < level_count; j++) {
-          char **removed = remove_element_str(levels, level_count, j);
-          if (is_safe(removed, level_count - 1)) {
+          if (is_safe_skip(levels, level_count, j)) {
             safe++;
-            for (int k = 0; k < level_count - 1; k++) {
-              free(removed[k]);
-            }
-            free(removed);
             break;
           }
-          for (int k = 0; k < level_count - 1; k++) {
-            free(removed[k]);
-          }
-          free(removed);
         }
 
         for (int j = 0; j < level_count; j++) {
