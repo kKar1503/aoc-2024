@@ -1,8 +1,10 @@
 package solutions
 
 import (
-	"fmt"
+	"regexp"
 	"strconv"
+
+	"github.com/kKar1503/aoc-2024/helper"
 )
 
 func parseNumber(input string, startingIdx int) (num, endingIdx int) {
@@ -42,20 +44,55 @@ func parseMultiplication(input string, startingIdx int) (num1, num2, endingIdx i
 	return num1, num2, endingIdx + 1
 }
 
-func Part1(input string) []byte {
+func Part1StringSearch(input string) int {
 	idx := 0
 	sum := 0
+
 	for idx < len(input) {
-		fmt.Printf("idx = %d, input[idx]=%c | ", idx, input[idx])
+		if input[idx] != 'm' {
+			idx++
+			continue
+		}
+
 		num1, num2, endingIdx := parseMultiplication(input, idx)
 		if endingIdx == -1 {
 			idx++
-			fmt.Println("skipping")
 			continue
 		}
-		fmt.Printf("num1 = %d, num2 = %d, parsed=%s\n", num1, num2, input[idx:endingIdx])
 		sum += num1 * num2
 		idx = endingIdx
 	}
-	return []byte(strconv.Itoa(sum))
+
+	return sum
+}
+
+func Part1RegexFindAllSubmatch(input string) int {
+	reg := regexp.MustCompile(`mul\((\d+),(\d+)\)`)
+	results := reg.FindAllSubmatch([]byte(input), -1)
+	if results == nil {
+		return 0
+	}
+
+	sum := 0
+	for _, result := range results {
+		sum += helper.MustInt(string(result[1])) * helper.MustInt(string(result[2]))
+	}
+
+	return sum
+}
+
+func Part1RegexFindStringSubmatchIndex(input string) int {
+	reg := regexp.MustCompile(`mul\((\d+),(\d+)\)`)
+	sum := 0
+
+	for loc := reg.FindStringSubmatchIndex(input); loc != nil; loc = reg.FindStringSubmatchIndex(input) {
+		sum += helper.MustInt(input[loc[2]:loc[3]]) * helper.MustInt(input[loc[4]:loc[5]])
+		input = input[loc[5]:]
+	}
+
+	return sum
+}
+
+func Part1(input string) []byte {
+	return []byte(strconv.Itoa(Part1RegexFindStringSubmatchIndex(input)))
 }
